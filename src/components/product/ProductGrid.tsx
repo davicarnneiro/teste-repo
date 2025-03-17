@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ProductCard from "./ProductCard";
+import ProductQuickView from "./ProductQuickView";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -123,6 +124,10 @@ const ProductGrid = ({
   const [sortOption, setSortOption] = useState("featured");
   const [showFilters, setShowFilters] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(
+    null,
+  );
+  const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
 
   const handleCategoryChange = (category: string) => {
     const updatedCategories = filters.categories.includes(category)
@@ -241,6 +246,17 @@ const ProductGrid = ({
 
   return (
     <div className="w-full max-w-[1400px] mx-auto px-4 py-8 bg-black text-white">
+      {quickViewProduct && (
+        <ProductQuickView
+          open={isQuickViewOpen}
+          onOpenChange={setIsQuickViewOpen}
+          product={quickViewProduct}
+          onAddToCart={() => {
+            console.log(`Added ${quickViewProduct.id} to cart`);
+            setIsQuickViewOpen(false);
+          }}
+        />
+      )}
       <div className="flex flex-col md:flex-row justify-between items-start gap-6">
         {/* Filters - Mobile Toggle */}
         <div className="w-full md:hidden mb-4">
@@ -251,7 +267,7 @@ const ProductGrid = ({
           >
             <span className="flex items-center">
               <SlidersHorizontal className="mr-2 h-4 w-4" />
-              Filters
+              Filtros
             </span>
             {filters.categories.length > 0 ||
             filters.showNewOnly ||
@@ -273,7 +289,7 @@ const ProductGrid = ({
           className={`${showFilters ? "block" : "hidden"} md:block w-full md:w-64 bg-gray-900 p-4 rounded-lg`}
         >
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-medium">Filters</h3>
+            <h3 className="text-lg font-medium">Filtros</h3>
             {(filters.categories.length > 0 ||
               filters.showNewOnly ||
               filters.searchQuery ||
@@ -285,17 +301,17 @@ const ProductGrid = ({
                 onClick={clearFilters}
                 className="text-xs text-gray-400 hover:text-white"
               >
-                Clear all
+                Limpar tudo
               </Button>
             )}
           </div>
 
           {/* Search */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium mb-2">Search</h4>
+            <h4 className="text-sm font-medium mb-2">Pesquisar</h4>
             <div className="flex gap-2">
               <Input
-                placeholder="Search jewelry..."
+                placeholder="Pesquisar joias..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="bg-gray-800 border-gray-700"
@@ -314,7 +330,7 @@ const ProductGrid = ({
 
           {/* Categories */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium mb-2">Categories</h4>
+            <h4 className="text-sm font-medium mb-2">Categorias</h4>
             <div className="space-y-2">
               {categories.map((category) => (
                 <div key={category} className="flex items-center">
@@ -339,7 +355,7 @@ const ProductGrid = ({
 
           {/* Price Range */}
           <div className="mb-6">
-            <h4 className="text-sm font-medium mb-2">Price Range</h4>
+            <h4 className="text-sm font-medium mb-2">Faixa de Preço</h4>
             <Slider
               defaultValue={[0, 5000]}
               value={[filters.priceRange[0], filters.priceRange[1]]}
@@ -349,8 +365,8 @@ const ProductGrid = ({
               className="my-6"
             />
             <div className="flex items-center justify-between text-sm">
-              <span>${filters.priceRange[0].toLocaleString()}</span>
-              <span>${filters.priceRange[1].toLocaleString()}</span>
+              <span>R${filters.priceRange[0].toLocaleString("pt-BR")}</span>
+              <span>R${filters.priceRange[1].toLocaleString("pt-BR")}</span>
             </div>
           </div>
 
@@ -371,7 +387,7 @@ const ProductGrid = ({
                 htmlFor="new-only"
                 className="ml-2 text-sm font-normal cursor-pointer"
               >
-                New arrivals only
+                Apenas novidades
               </Label>
             </div>
           </div>
@@ -382,29 +398,29 @@ const ProductGrid = ({
           {/* Sort and Results Count */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
             <div className="text-sm text-gray-400">
-              Showing{" "}
+              Mostrando{" "}
               <span className="font-medium text-white">
                 {sortedProducts.length}
               </span>{" "}
-              products
+              produtos
             </div>
 
             <div className="flex items-center">
-              <span className="text-sm mr-2">Sort by:</span>
+              <span className="text-sm mr-2">Ordenar por:</span>
               <Select value={sortOption} onValueChange={handleSortChange}>
                 <SelectTrigger className="w-[180px] bg-gray-900 border-gray-700">
-                  <SelectValue placeholder="Featured" />
+                  <SelectValue placeholder="Destaque" />
                 </SelectTrigger>
                 <SelectContent className="bg-gray-900 border-gray-700">
-                  <SelectItem value="featured">Featured</SelectItem>
+                  <SelectItem value="featured">Destaque</SelectItem>
                   <SelectItem value="price-low-high">
-                    Price: Low to High
+                    Preço: Menor para Maior
                   </SelectItem>
                   <SelectItem value="price-high-low">
-                    Price: High to Low
+                    Preço: Maior para Menor
                   </SelectItem>
-                  <SelectItem value="name-a-z">Name: A to Z</SelectItem>
-                  <SelectItem value="name-z-a">Name: Z to A</SelectItem>
+                  <SelectItem value="name-a-z">Nome: A a Z</SelectItem>
+                  <SelectItem value="name-z-a">Nome: Z a A</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -434,7 +450,7 @@ const ProductGrid = ({
                   variant="outline"
                   className="flex items-center gap-1 bg-gray-800 border-gray-700 px-3 py-1"
                 >
-                  New Only
+                  Apenas novidades
                   <X
                     className="h-3 w-3 ml-1 cursor-pointer"
                     onClick={() => handleNewOnlyChange(false)}
@@ -447,7 +463,7 @@ const ProductGrid = ({
                   variant="outline"
                   className="flex items-center gap-1 bg-gray-800 border-gray-700 px-3 py-1"
                 >
-                  Search: {filters.searchQuery}
+                  Pesquisa: {filters.searchQuery}
                   <X
                     className="h-3 w-3 ml-1 cursor-pointer"
                     onClick={() => {
@@ -473,6 +489,10 @@ const ProductGrid = ({
                   image={product.image}
                   category={product.category}
                   isNew={product.isNew}
+                  onQuickView={() => {
+                    setQuickViewProduct(product);
+                    setIsQuickViewOpen(true);
+                  }}
                 />
               ))}
             </div>
@@ -480,10 +500,12 @@ const ProductGrid = ({
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <div className="text-gray-400 mb-4">
                 <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <h3 className="text-xl font-medium mb-2">No products found</h3>
+                <h3 className="text-xl font-medium mb-2">
+                  Nenhum produto encontrado
+                </h3>
                 <p className="max-w-md mx-auto">
-                  We couldn't find any products matching your current filters.
-                  Try adjusting your search or filter criteria.
+                  Não encontramos produtos que correspondam aos seus filtros
+                  atuais. Tente ajustar sua pesquisa ou critérios de filtro.
                 </p>
               </div>
               <Button
@@ -491,7 +513,7 @@ const ProductGrid = ({
                 onClick={clearFilters}
                 className="mt-4 border-gray-700 hover:bg-gray-800"
               >
-                Clear all filters
+                Limpar todos os filtros
               </Button>
             </div>
           )}
