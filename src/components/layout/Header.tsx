@@ -50,71 +50,87 @@ const Header = ({
         <Menu className="h-6 w-6" />
       </Button>
 
-      {/* Logo */}
-      <div className="flex items-center">
+      {/* Logo and Navigation */}
+      <div className="flex items-center space-x-6">
+        {/* Logo */}
         <h1 className="text-xl md:text-2xl font-bold text-white">{logo}</h1>
-      </div>
 
-      {/* Navigation (hidden on mobile) */}
-      <nav className="hidden md:flex items-center space-x-6">
-        <a
-          href="#"
-          className="text-white hover:text-gold-400 transition-colors"
-        >
-          Home
-        </a>
-        <a
-          href="#"
-          className="text-white hover:text-gold-400 transition-colors"
-        >
-          Collections
-        </a>
-        <a
-          href="#"
-          className="text-white hover:text-gold-400 transition-colors"
-        >
-          New Arrivals
-        </a>
-        <a
-          href="#"
-          className="text-white hover:text-gold-400 transition-colors"
-        >
-          Sale
-        </a>
-      </nav>
+        {/* Navigation (hidden on mobile) */}
+        <nav className="hidden md:flex items-center space-x-6">
+          <a
+            href="#"
+            className="text-white hover:text-gold-400 transition-colors"
+          >
+            Home
+          </a>
+          <a
+            href="#"
+            className="text-white hover:text-gold-400 transition-colors"
+          >
+            Collections
+          </a>
+          <a
+            href="#"
+            className="text-white hover:text-gold-400 transition-colors"
+          >
+            New Arrivals
+          </a>
+          <a
+            href="#"
+            className="text-white hover:text-gold-400 transition-colors"
+          >
+            Sale
+          </a>
+        </nav>
+      </div>
 
       {/* Search, User, and Cart */}
       <div className="flex items-center space-x-4">
-        {/* Search */}
-        <div className="relative">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="text-white"
-            onClick={() => setIsSearchOpen(!isSearchOpen)}
-          >
-            <Search className="h-5 w-5" />
-          </Button>
-          {isSearchOpen && (
-            <div className="absolute right-0 top-full mt-2 w-64 bg-gray-900 p-2 rounded-md shadow-lg">
-              <div className="flex items-center">
-                <Input
-                  type="search"
-                  placeholder="Search for jewelry..."
-                  className="flex-1 bg-gray-800 border-gray-700 text-white"
-                />
-                <Button
-                  size="sm"
-                  className="ml-2 bg-gold-500 hover:bg-gold-600"
-                >
-                  Search
-                </Button>
-              </div>
-            </div>
-          )}
+        {/* Search - Now more prominent */}
+        <div className="relative hidden md:block">
+          <div className="flex items-center bg-gray-900 rounded-md">
+            <Input
+              type="search"
+              placeholder="Pesquisar joias..."
+              className="w-64 bg-gray-900 border-gray-700 text-white focus-visible:ring-gold-500"
+            />
+            <Button
+              size="icon"
+              className="ml-1 text-white bg-transparent hover:bg-gray-800"
+            >
+              <Search className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
-        {/* User Account */}
+        {/* Mobile Search Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden text-white"
+          onClick={() => setIsSearchOpen(!isSearchOpen)}
+        >
+          <Search className="h-5 w-5" />
+        </Button>
+        {isSearchOpen && (
+          <div className="absolute left-0 right-0 top-20 px-4 py-2 bg-gray-900 md:hidden">
+            <div className="flex items-center">
+              <Input
+                type="search"
+                placeholder="Pesquisar joias..."
+                className="flex-1 bg-gray-800 border-gray-700 text-white"
+              />
+              <Button
+                size="sm"
+                className="ml-2 bg-gold-500 hover:bg-gold-600 text-black"
+              >
+                Pesquisar
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* User Account - Login/Cadastro */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="text-white">
@@ -133,17 +149,24 @@ const Header = ({
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-gray-800" />
             <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
-              Profile
+              Login
             </DropdownMenuItem>
             <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
-              Orders
-            </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
-              Wishlist
+              Cadastro
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-gray-800" />
             <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
-              Sign out
+              Perfil
+            </DropdownMenuItem>
+            <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
+              Pedidos
+            </DropdownMenuItem>
+            <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
+              Lista de Desejos
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-gray-800" />
+            <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
+              Sair
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -162,11 +185,11 @@ const Header = ({
           </SheetTrigger>
           <SheetContent className="bg-gray-900 text-white border-l border-gray-800">
             <SheetHeader>
-              <SheetTitle className="text-white">Your Cart</SheetTitle>
+              <SheetTitle className="text-white">Seu Carrinho</SheetTitle>
               <SheetDescription className="text-gray-400">
                 {cartItemCount > 0
-                  ? `You have ${cartItemCount} items in your cart`
-                  : "Your cart is empty"}
+                  ? `Você tem ${cartItemCount} itens no seu carrinho`
+                  : "Seu carrinho está vazio"}
               </SheetDescription>
             </SheetHeader>
             <div className="mt-6 space-y-4">
@@ -176,18 +199,18 @@ const Header = ({
                     <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
                       <img
                         src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&q=80"
-                        alt="Diamond Ring"
+                        alt="Anel de Diamante"
                         className="h-full w-full object-cover"
                       />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-sm font-medium">
-                        Diamond Eternity Ring
+                        Anel de Diamante Eternity
                       </h4>
-                      <p className="text-sm text-gray-400">18K White Gold</p>
+                      <p className="text-sm text-gray-400">Ouro Branco 18K</p>
                       <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm">$2,499.00</span>
-                        <span className="text-sm text-gray-400">Qty: 1</span>
+                        <span className="text-sm">R$ 12.499,00</span>
+                        <span className="text-sm text-gray-400">Qtd: 1</span>
                       </div>
                     </div>
                   </div>
@@ -195,18 +218,18 @@ const Header = ({
                     <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
                       <img
                         src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&q=80"
-                        alt="Pearl Necklace"
+                        alt="Colar de Pérolas"
                         className="h-full w-full object-cover"
                       />
                     </div>
                     <div className="flex-1">
-                      <h4 className="text-sm font-medium">
-                        Pearl Strand Necklace
-                      </h4>
-                      <p className="text-sm text-gray-400">Freshwater Pearls</p>
+                      <h4 className="text-sm font-medium">Colar de Pérolas</h4>
+                      <p className="text-sm text-gray-400">
+                        Pérolas de Água Doce
+                      </p>
                       <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm">$899.00</span>
-                        <span className="text-sm text-gray-400">Qty: 1</span>
+                        <span className="text-sm">R$ 4.899,00</span>
+                        <span className="text-sm text-gray-400">Qtd: 1</span>
                       </div>
                     </div>
                   </div>
@@ -214,43 +237,43 @@ const Header = ({
                     <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
                       <img
                         src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=300&q=80"
-                        alt="Gold Bracelet"
+                        alt="Pulseira de Ouro"
                         className="h-full w-full object-cover"
                       />
                     </div>
                     <div className="flex-1">
                       <h4 className="text-sm font-medium">
-                        Gold Chain Bracelet
+                        Pulseira de Corrente de Ouro
                       </h4>
-                      <p className="text-sm text-gray-400">24K Gold</p>
+                      <p className="text-sm text-gray-400">Ouro 24K</p>
                       <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm">$1,299.00</span>
-                        <span className="text-sm text-gray-400">Qty: 1</span>
+                        <span className="text-sm">R$ 6.299,00</span>
+                        <span className="text-sm text-gray-400">Qtd: 1</span>
                       </div>
                     </div>
                   </div>
                   <div className="mt-6 space-y-4">
                     <div className="flex justify-between">
                       <span className="text-gray-400">Subtotal</span>
-                      <span>$4,697.00</span>
+                      <span>R$ 23.697,00</span>
                     </div>
                     <Button className="w-full bg-gold-500 hover:bg-gold-600 text-black">
-                      Checkout
+                      Finalizar Compra
                     </Button>
                     <Button
                       variant="outline"
                       className="w-full border-gray-700 text-white hover:bg-gray-800"
                     >
-                      View Cart
+                      Ver Carrinho
                     </Button>
                   </div>
                 </>
               ) : (
                 <div className="flex flex-col items-center justify-center h-40">
                   <ShoppingCart className="h-12 w-12 text-gray-500 mb-4" />
-                  <p className="text-gray-400">Your cart is empty</p>
+                  <p className="text-gray-400">Seu carrinho está vazio</p>
                   <Button className="mt-4 bg-gold-500 hover:bg-gold-600 text-black">
-                    Browse Collections
+                    Ver Coleções
                   </Button>
                 </div>
               )}
@@ -279,25 +302,25 @@ const Header = ({
               href="#"
               className="text-white hover:text-gold-400 transition-colors py-2 border-b border-gray-800"
             >
-              Collections
+              Coleções
             </a>
             <a
               href="#"
               className="text-white hover:text-gold-400 transition-colors py-2 border-b border-gray-800"
             >
-              New Arrivals
+              Novidades
             </a>
             <a
               href="#"
               className="text-white hover:text-gold-400 transition-colors py-2 border-b border-gray-800"
             >
-              Sale
+              Promoções
             </a>
             <a
               href="#"
               className="text-white hover:text-gold-400 transition-colors py-2 border-b border-gray-800"
             >
-              Account
+              Conta
             </a>
           </nav>
         </SheetContent>
