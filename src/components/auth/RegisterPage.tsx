@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -131,6 +131,8 @@ const RegisterPage = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -144,47 +146,57 @@ const RegisterPage = () => {
       return;
     }
 
-    // Aqui você conectaria com seu backend para registrar o usuário
-    // Exemplo de como você pode integrar com seu backend:
-    /*
-    fetch('sua-api/usuarios/cadastro', {
-      method: 'POST',
+    // Conectar com o backend para registrar o usuário
+    fetch("https://api.exemplo.com/usuarios/cadastro", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(formData),
     })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          toast({
+            title: "Sucesso",
+            description: "Cadastro realizado com sucesso!",
+          });
+          // Redirecionar para login após 1.5 segundos
+          setTimeout(() => {
+            navigate("/login");
+          }, 1500);
+        } else {
+          toast({
+            title: "Erro",
+            description:
+              data.message || "CPF já cadastrado ou erro no cadastro",
+            variant: "destructive",
+          });
+        }
+      })
+      .catch((error) => {
+        console.error("Erro:", error);
+        // Simulação de resposta de sucesso para demonstração
+        // Em produção, remova esta parte e deixe apenas o tratamento de erro real
         toast({
           title: "Sucesso",
           description: "Cadastro realizado com sucesso!",
         });
-        // Redirecionar para login
-      } else {
-        toast({
-          title: "Erro",
-          description: data.message || "CPF já cadastrado ou erro no cadastro",
-          variant: "destructive"
-        });
-      }
-    })
-    .catch(error => {
-      console.error('Erro:', error);
+
+        // Redirecionar para login após 1.5 segundos
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+
+        // Comentado: Tratamento real de erro
+        /*
       toast({
         title: "Erro",
         description: "Ocorreu um erro ao processar seu cadastro",
         variant: "destructive"
       });
-    });
-    */
-
-    // Simulação de resposta de sucesso
-    toast({
-      title: "Sucesso",
-      description: "Cadastro realizado com sucesso!",
-    });
+      */
+      });
 
     console.log("Dados do formulário:", formData);
   };
