@@ -176,8 +176,11 @@ const CartPage = () => {
                   <span>R$ {calculateTotal().toLocaleString("pt-BR")}</span>
                 </div>
 
-                <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black py-6 mt-4">
-                  Finalizar Compra
+                <Button
+                  className="w-full bg-amber-500 hover:bg-amber-600 text-black py-6 mt-4"
+                  asChild
+                >
+                  <Link to="/pagamento">Finalizar Compra</Link>
                 </Button>
               </div>
             </div>
