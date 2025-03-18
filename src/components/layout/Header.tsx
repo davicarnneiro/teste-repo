@@ -247,8 +247,9 @@ const Header = ({
                     <Button
                       variant="outline"
                       className="w-full border-gray-700 text-white hover:bg-gray-800"
+                      asChild
                     >
-                      Ver Carrinho
+                      <Link to="/carrinho">Ver Carrinho</Link>
                     </Button>
                   </div>
                 </>
@@ -256,8 +257,11 @@ const Header = ({
                 <div className="flex flex-col items-center justify-center h-40">
                   <ShoppingCart className="h-12 w-12 text-gray-500 mb-4" />
                   <p className="text-gray-400">Seu carrinho está vazio</p>
-                  <Button className="mt-4 bg-amber-500 hover:bg-amber-600 text-black">
-                    Ver Coleções
+                  <Button
+                    className="mt-4 bg-amber-500 hover:bg-amber-600 text-black"
+                    asChild
+                  >
+                    <Link to="/carrinho">Ver Carrinho</Link>
                   </Button>
                 </div>
               )}

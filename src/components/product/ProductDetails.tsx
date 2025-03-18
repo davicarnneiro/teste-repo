@@ -162,6 +162,8 @@ const ProductDetails = ({
                   quantity,
                 );
                 onAddToCart(quantity);
+                // Show success message
+                alert("Produto adicionado ao carrinho!");
               }}
               disabled={!inStock}
             >
@@ -170,7 +172,7 @@ const ProductDetails = ({
             </Button>
             <Button
               variant="outline"
-              className="flex-1 border-gray-700 hover:bg-gray-800 py-6"
+              className="flex-1 border-gray-700 bg-amber-500 hover:bg-amber-600 text-black py-6"
             >
               <Heart className="mr-2 h-5 w-5" />
               Adicionar aos Favoritos
