@@ -241,8 +241,11 @@ const Header = ({
                           .toLocaleString("pt-BR")}
                       </span>
                     </div>
-                    <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black">
-                      Finalizar Compra
+                    <Button
+                      className="w-full bg-amber-500 hover:bg-amber-600 text-black"
+                      asChild
+                    >
+                      <Link to="/carrinho">Finalizar Compra</Link>
                     </Button>
                     <Button
                       variant="outline"
