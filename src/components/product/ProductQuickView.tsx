@@ -1,4 +1,5 @@
 import React from "react";
+import { useCart } from "@/context/CartContext";
 import {
   Dialog,
   DialogContent,
@@ -33,6 +34,7 @@ const ProductQuickView = ({
   product,
   onAddToCart,
 }: ProductQuickViewProps) => {
+  const { addToCart } = useCart();
   const {
     id,
     name,
@@ -86,7 +88,18 @@ const ProductQuickView = ({
             <div className="mt-auto space-y-4">
               <Button
                 className="w-full bg-amber-500 hover:bg-amber-600 text-black"
-                onClick={onAddToCart}
+                onClick={() => {
+                  addToCart(
+                    {
+                      id,
+                      name,
+                      price,
+                      image,
+                    },
+                    1,
+                  );
+                  onAddToCart();
+                }}
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 Adicionar ao Carrinho

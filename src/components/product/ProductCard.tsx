@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { ShoppingCart, Eye } from "lucide-react";
 import { Badge } from "../ui/badge";
 import { Link } from "react-router-dom";
+import { useCart } from "@/context/CartContext";
 import {
   Tooltip,
   TooltipContent,
@@ -29,9 +30,22 @@ const ProductCard = ({
   image = "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&q=80",
   category = "Anéis",
   isNew = false,
-  onAddToCart = () => console.log("Add to cart clicked"),
+  onAddToCart,
   onQuickView = () => console.log("Quick view clicked"),
 }: ProductCardProps) => {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(
+      {
+        id,
+        name,
+        price,
+        image,
+      },
+      1,
+    );
+  };
   return (
     <Card className="w-full max-w-[320px] overflow-hidden transition-all duration-300 hover:shadow-lg bg-black border-gray-800">
       <Link to={`/produto/${id}`} className="cursor-pointer">
@@ -86,7 +100,7 @@ const ProductCard = ({
           className="w-full bg-amber-500 hover:bg-amber-600 text-black"
           onClick={(e) => {
             e.stopPropagation();
-            onAddToCart();
+            handleAddToCart();
           }}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />

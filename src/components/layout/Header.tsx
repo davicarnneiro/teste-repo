@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
 import { Search, ShoppingCart, User, Menu } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 interface HeaderProps {
   logo?: string;
@@ -31,10 +32,10 @@ interface HeaderProps {
 
 const Header = ({
   logo = "Luxury Jewels",
-  cartItemCount = 3,
   userAvatar = "",
   userName = "Guest",
 }: HeaderProps) => {
+  const { cartItemCount, cartItems } = useCart();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -188,76 +189,52 @@ const Header = ({
               <SheetTitle className="text-white">Seu Carrinho</SheetTitle>
               <SheetDescription className="text-gray-400">
                 {cartItemCount > 0
-                  ? `Você tem ${cartItemCount} itens no seu carrinho`
+                  ? `Você tem ${cartItemCount} ${cartItemCount === 1 ? "item" : "itens"} no seu carrinho`
                   : "Seu carrinho está vazio"}
               </SheetDescription>
             </SheetHeader>
             <div className="mt-6 space-y-4">
               {cartItemCount > 0 ? (
                 <>
-                  <div className="flex items-center gap-4 pb-4 border-b border-gray-800">
-                    <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
-                      <img
-                        src="https://images.unsplash.com/photo-1611085583191-a3b181a88401?w=300&q=80"
-                        alt="Anel de Diamante"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium">
-                        Anel de Diamante Eternity
-                      </h4>
-                      <p className="text-sm text-gray-400">Ouro Branco 18K</p>
-                      <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm">R$ 12.499,00</span>
-                        <span className="text-sm text-gray-400">Qtd: 1</span>
+                  {cartItems.map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-4 pb-4 border-b border-gray-800"
+                    >
+                      <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-medium">{item.name}</h4>
+                        <div className="flex justify-between items-center mt-1">
+                          <span className="text-sm">
+                            R$ {item.price.toLocaleString("pt-BR")}
+                          </span>
+                          <span className="text-sm text-gray-400">
+                            Qtd: {item.quantity}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-4 pb-4 border-b border-gray-800">
-                    <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
-                      <img
-                        src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=300&q=80"
-                        alt="Colar de Pérolas"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium">Colar de Pérolas</h4>
-                      <p className="text-sm text-gray-400">
-                        Pérolas de Água Doce
-                      </p>
-                      <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm">R$ 4.899,00</span>
-                        <span className="text-sm text-gray-400">Qtd: 1</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4 pb-4 border-b border-gray-800">
-                    <div className="h-16 w-16 bg-gray-800 rounded-md overflow-hidden">
-                      <img
-                        src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=300&q=80"
-                        alt="Pulseira de Ouro"
-                        className="h-full w-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium">
-                        Pulseira de Corrente de Ouro
-                      </h4>
-                      <p className="text-sm text-gray-400">Ouro 24K</p>
-                      <div className="flex justify-between items-center mt-1">
-                        <span className="text-sm">R$ 6.299,00</span>
-                        <span className="text-sm text-gray-400">Qtd: 1</span>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                   <div className="mt-6 space-y-4">
                     <div className="flex justify-between">
                       <span className="text-gray-400">Subtotal</span>
-                      <span>R$ 23.697,00</span>
+                      <span>
+                        R${" "}
+                        {cartItems
+                          .reduce(
+                            (total, item) => total + item.price * item.quantity,
+                            0,
+                          )
+                          .toLocaleString("pt-BR")}
+                      </span>
                     </div>
-                    <Button className="w-full bg-gold-500 hover:bg-gold-600 text-black">
+                    <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black">
                       Finalizar Compra
                     </Button>
                     <Button
@@ -272,7 +249,7 @@ const Header = ({
                 <div className="flex flex-col items-center justify-center h-40">
                   <ShoppingCart className="h-12 w-12 text-gray-500 mb-4" />
                   <p className="text-gray-400">Seu carrinho está vazio</p>
-                  <Button className="mt-4 bg-gold-500 hover:bg-gold-600 text-black">
+                  <Button className="mt-4 bg-amber-500 hover:bg-amber-600 text-black">
                     Ver Coleções
                   </Button>
                 </div>

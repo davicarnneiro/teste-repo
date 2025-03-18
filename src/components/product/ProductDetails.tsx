@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useCart } from "@/context/CartContext";
 import { Button } from "../ui/button";
 import {
   ShoppingCart,
@@ -42,6 +43,7 @@ const ProductDetails = ({
   onAddToCart = (quantity) => console.log(`Add ${quantity} to cart clicked`),
   onBack = () => console.log("Back clicked"),
 }: ProductDetailsProps) => {
+  const { addToCart } = useCart();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
@@ -149,7 +151,18 @@ const ProductDetails = ({
           <div className="flex flex-col sm:flex-row gap-4 mb-8">
             <Button
               className="flex-1 bg-amber-500 hover:bg-amber-600 text-black font-medium py-6"
-              onClick={() => onAddToCart(quantity)}
+              onClick={() => {
+                addToCart(
+                  {
+                    id,
+                    name,
+                    price,
+                    image: images[0],
+                  },
+                  quantity,
+                );
+                onAddToCart(quantity);
+              }}
               disabled={!inStock}
             >
               <ShoppingCart className="mr-2 h-5 w-5" />
