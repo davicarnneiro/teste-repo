@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -149,11 +150,17 @@ const Header = ({
               <span>{userName}</span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-gray-800" />
-            <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
-              Login
+            <DropdownMenuItem
+              className="hover:bg-gray-800 cursor-pointer"
+              asChild
+            >
+              <Link to="/login">Login</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
-              Cadastro
+            <DropdownMenuItem
+              className="hover:bg-gray-800 cursor-pointer"
+              asChild
+            >
+              <Link to="/cadastro">Cadastro</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-gray-800" />
             <DropdownMenuItem className="hover:bg-gray-800 cursor-pointer">
